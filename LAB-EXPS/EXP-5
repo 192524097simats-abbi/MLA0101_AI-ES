@@ -1,0 +1,27 @@
+import heapq
+grid = [
+    [0, 0, 0, 0],
+    [1, 1, 0, 1],
+    [0, 0, 0, 0],
+    [0, 1, 1, 0]
+]   # 0 = free, 1 = blocked
+def manhattan(a, b):
+    return abs(a[0] - b[0]) + abs(a[1] - b[1])
+def greedy(grid, start, goal):
+    pq = [(manhattan(start, goal), start, [start])]
+    visited = set()
+    while pq:
+        _, (r, c), path = heapq.heappop(pq)
+        if (r, c) == goal:
+            return path
+        if (r, c) in visited:
+            continue
+        visited.add((r, c))
+        for dr, dc in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
+            nr, nc = r + dr, c + dc
+            if (0 <= nr < len(grid) and 0 <= nc < len(grid[0])
+                    and grid[nr][nc] == 0 and (nr, nc) not in visited):
+                heapq.heappush(pq, (manhattan((nr, nc), goal),
+                                    (nr, nc), path + [(nr, nc)]))
+    return None
+print("Path:", greedy(grid, (0, 0), (3, 3)))
