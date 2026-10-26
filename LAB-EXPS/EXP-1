@@ -1,0 +1,27 @@
+from collections import deque
+graph = {
+    'A': ['B', 'C'],
+    'B': ['D', 'E'],
+    'C': ['F'],
+    'D': [],
+    'E': ['F'],
+    'F': []
+}
+def bfs(graph, start, goal):
+    queue = deque([[start]])      
+    visited = {start}
+    order = []
+    while queue:
+        path = queue.popleft()
+        node = path[-1]
+        order.append(node)
+        if node == goal:
+            return path, order
+        for nxt in graph[node]:
+            if nxt not in visited:
+                visited.add(nxt)
+                queue.append(path + [nxt])
+    return None, order
+path, order = bfs(graph, 'A', 'F')
+print("Visiting order:", order)
+print("Shortest path :", path)
